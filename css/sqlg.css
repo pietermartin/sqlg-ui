@@ -1,0 +1,44 @@
+body {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    height: auto;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+    border: solid grey;
+    border-width: 1px 0;
+    overflow: hidden;
+}
+
+footer {
+    height: 25px;
+    min-height: 25px;
+}
+
+.leftNav {
+    width: 350px;
+    min-width: 350px;
+}
+
+.mainDiv {
+    border: solid grey;
+    border-width: 0 0 0 1px;
+    flex: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.splitter {
+    border-left: 1px solid grey;
+    width: 4px;
+    min-width: 4px;
+    cursor: col-resize;
+}
