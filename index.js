@@ -1,7 +1,6 @@
 var m = require("./node_modules/mithril/mithril");
 var Layout = require("./components/layout/layout");
 var Menu = require("./components/menu/menu");
-var Tabs = require("./components/tabs/tabs");
 var Connect = require("./components/connect/connect");
 var TopologyTree = require("./components/topologytree/topologyTree");
 var Schema = require("./components/topology/schema");
@@ -12,7 +11,9 @@ m.mount(document.body, Connect);
 m.route(document.body, "/", {
     "/": {
         render: function () {
-            return m(Layout, [m(Menu), m(TopologyTree), m(Connect)])
+            return m(Layout, [
+                m(Menu), m(TopologyTree), m(Connect)
+            ])
         }
     },
     "/sqlg/:tab": {
@@ -22,8 +23,8 @@ m.route(document.body, "/", {
                 m(TopologyTree),
                 m(Tabs, {
                     tab: vnode.attrs.tab,
-                    tabLis: [homeLi, gremlinLi, sqlLi],
-                    tabs: [home, gremlin, sql]
+                    tabLis: [homeLi, gremlinLi, sqlLi, sqlLi1, sqlLi2, sqlLi3, sqlLi4],
+                    tabs: [home, gremlin, sql, sql1, sql2, sql3, sql4]
                 })
             ])
         }
