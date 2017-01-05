@@ -1,5 +1,6 @@
 body {
     height: 100%;
+    width: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -33,7 +34,7 @@ footer {
     border-width: 0 0 0 1px;
     flex: auto;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .splitter {

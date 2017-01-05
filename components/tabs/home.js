@@ -1,17 +1,23 @@
-var homeLi = {
-    view: function (vnode) {
-        return m("li", {class: "nav-item"}, [
-            m("a[href=/sqlg/home]", {
-                class: "nav-link",
-                oncreate: m.route.link,
-                'data-target': "#home"
-            }, "Home")
-        ]);
-    }
-}
+// var homeLi = {
+//     view: function (vnode) {
+//         return m("li", [
+//             m("a[href=/sqlg/home]", {
+//                 oncreate: m.route.link,
+//             }, "Home")
+//         ]);
+//     }
+// }
+
+
 
 var home = {
+    name: function () {
+        return "home";
+    },
+    url: function() {
+        return "/sqlg/home";
+    },
     view: function (vnode) {
-        return m("div", {class: "tab-pane", id: "home"}, "home");
+        return m("div", "home");
     }
 }

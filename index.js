@@ -22,8 +22,7 @@ m.route(document.body, "/", {
                 m(Menu),
                 m(TopologyTree),
                 m(Tabs, {
-                    tab: vnode.attrs.tab,
-                    tabLis: [homeLi, gremlinLi, sqlLi, sqlLi1, sqlLi2, sqlLi3, sqlLi4],
+                    activeTab: vnode.attrs.tab,
                     tabs: [home, gremlin, sql, sql1, sql2, sql3, sql4]
                 })
             ])

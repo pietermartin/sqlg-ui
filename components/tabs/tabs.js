@@ -1,122 +1,165 @@
-var dropDownState = [
-    {name: "Action1", href: "/sqlg/dropdown1", dataTarget: "action1"}
-];
+var tabBarWidth = -1;
+var resizeEvent = false;
 
-var Tabs = {
-    addToDropDown: function (tab) {
-        var jqueryTab = $(tab);
-        var aLink = jqueryTab.children("a").attr("href");
-        var aDataTarget = jqueryTab.children("a").attr("data-target");
-        var aText = jqueryTab.children("a").text();
-        var tabToDropDown = {name: aText, href: aLink, dataTarget: aDataTarget};
-        dropDownState.push(tabToDropDown);
-        tab.remove();
+var DropdownLi = {
+    view: function (vnode) {
+        var tab = vnode.attrs.tab;
+        var visibleTabs = vnode.attrs.visibleTabs;
+        if (visibleTabs[tab.name()]) {
+            return m("li", {class: visibleTabs[tab.name()].visible ? "" : "ttd-show"}, [
+                m("a[href=" + tab.url() + "]", {oncreate: m.route.link}, tab.name())
+            ]);
+        } else {
+            return m("li", [m("a[href=" + tab.url() + "]", {oncreate: m.route.link}, tab.name())]);
+        }
+    }
+};
+
+var Dropdown = {
+    view: function (vnode) {
+        return m("div", {class: "dropdown" + (vnode.attrs.nav.showDropDown ? " ttd-show" : "")}, [
+            m("button", {
+                class: "dropdown-toggle", onclick: function () {
+                    $(vnode.dom).toggleClass("ttd-open");
+                }
+            }, "...", [
+                m("span", {class: "fa fa-angle-down"})
+            ]),
+            m("ul", [
+                vnode.attrs.nav.tabs.map(function (tab) {
+                    return m(DropdownLi, {visibleTabs: vnode.attrs.nav.visibleTabs, tab: tab});
+                })
+            ])
+        ])
+    }
+};
+
+var Li = {
+    tab: null,
+    view: function (vnode) {
+        this.tab = vnode.attrs.tab;
+        return m("li", [m("a[href=" + vnode.attrs.tab.url() + "]", {oncreate: m.route.link}, vnode.attrs.tab.name())]);
+    }
+};
+
+var Ul = {
+    nav: null,
+    tabs: [],
+    hideTab: function (tab) {
+        var redraw = false;
+        //check is it needs to be hidden.
+        if (Ul.nav.visibleTabs[tab.name()].visible) {
+            Ul.nav.visibleTabs[tab.name()].visible = false;
+            redraw = true;
+        }
+        return redraw;
+    },
+    showTab: function (tab) {
+        var redraw = false;
+        //check is it needs to be hidden.
+        if (!Ul.nav.visibleTabs[tab.name()].visible) {
+            Ul.nav.visibleTabs[tab.name()].visible = true;
+            redraw = true;
+        }
+        return redraw;
     },
     onupdate: function (vnode) {
-        $("#tabs a[data-target='#" + vnode.attrs.tab + "']").tab('show');
+        var redraw = false;
+        var arrayLength = vnode.children.length;
+        Ul.nav.showDropDown = false;
+        for (var i = 0; i < arrayLength; i++) {
+            var childVnode = vnode.children[i];
+            var tabListItemOffset = $(childVnode.dom).position().left + $(childVnode.dom).outerWidth();
+            if (tabListItemOffset >= tabBarWidth) {
+                redraw  = redraw || vnode.state.hideTab(childVnode.state.tab);
+                Ul.nav.showDropDown = true;
+            } else {
+                redraw = redraw || vnode.state.showTab(childVnode.state.tab);
+            }
+        }
+        if (redraw) {
+            m.redraw();
+        }
     },
     oncreate: function (vnode) {
-        $("#tabs").each(function () {
+        var redraw = false;
+        Ul.tabs = vnode.attrs.tabs;
+        Ul.nav.showDropDown = false;
+        var arrayLength = vnode.children.length;
+        for (var i = 0; i < arrayLength; i++) {
+            var childVnode = vnode.children[i];
+            var tabListItemOffset = $(childVnode.dom).position().left + $(childVnode.dom).outerWidth();
+            if (tabListItemOffset >= tabBarWidth) {
+                Ul.nav.showDropDown = true;
+                redraw  = redraw || vnode.state.hideTab(childVnode.state.tab);
+            }
+        }
+        if (redraw) {
+            m.redraw();
+        }
+    },
+    view: function (vnode) {
+        Ul.nav = vnode.attrs.nav;
+        return m("ul", vnode.children);
+    }
+}
+
+var Nav = {
+    tabs: [],
+    visibleTabs: {},
+    showDropDown: false,
+    prepareTabs: function () {
+        Nav.tabs.map(function (tab) {
+            Nav.visibleTabs[tab.name()] = {visible: true};
+        });
+    },
+    onupdate: function(vnode) {
+        tabBarWidth = vnode.dom.offsetWidth;
+    },
+    oncreate: function(vnode) {
+        vnode.state.prepareTabs();
+        tabBarWidth = vnode.dom.offsetWidth;
+    },
+    view: function (vnode) {
+        Nav.tabs = vnode.attrs.tabs;
+        return [
+            m("nav", {class: "tab-bar"},
+                    m(Ul, {nav: Nav, tabs: vnode.attrs.tabs},
+                        vnode.attrs.tabs.map(function (tab) {
+                                return m(Li, {tab: tab});
+                            }
+                        )
+                    )
+            ),
+            m(Dropdown, {nav: this})
+        ]
+    }
+};
+
+var Tabs = {
+    oncreate: function (vnode) {
+        $(".tabs-to-dropdown").each(function () {
             var resizeTimeout = 20;
-
-            var tabList = $(this);
-            var tabListItems = tabList.children("li");
-
-            var dropdown = $(this).children(".dropdown");
-            var dropdownToggle = dropdown.children(".dropdown-toggle");
-
-            var clickHandler = ("ontouchstart" in document.documentElement ? "touchstart" : "click");
-
-            var tabsToDropdown = function () {
-                var previousTabListItemOffset = -1;
-                tabListItems.each(function (index) {
-                    if (index !== tabListItems.length - 1) {
-                        var tabListItem = tabListItems[index];
-                        var tabListItemOffset = $(this).position().left + $(this).outerWidth();
-
-                        if (previousTabListItemOffset !== -1 && previousTabListItemOffset > tabListItemOffset) {
-                            console.log("its wrapped");
-                            Tabs.addToDropDown(tabListItem);
-                        } else {
-                            console.log("no wrapped");
-                        }
-                        previousTabListItemOffset = tabListItemOffset;
-                    }
-                });
-            };
-
-            tabsToDropdown();
             $(window).bind("resize", function () {
                 if (typeof sizeWait != "undefined") {
                     clearTimeout(sizeWait);
                 }
                 sizeWait = setTimeout(function () {
-                    tabsToDropdown();
+                    m.redraw();
                 }, resizeTimeout);
             });
-
-            dropdown.bind(clickHandler, function (e) {
-                // e.stopPropagation();
-            });
-            $(document).bind(clickHandler, function () {
-                // e.stopPropagation();
-            });
         });
-        $("#tabs a[data-target='#" + vnode.attrs.tab + "']").tab('show');
-        $('.dropdown-toggle').dropdown();
-        $('#tabs a').click(function (e) {
-            e.preventDefault()
-            $(this).tab('show')
-            m.redraw();
-            console.log(vnode);
-        });
-        //bug https://github.com/twbs/bootstrap/issues/17371
-        $('.nav-tabs').on('shown.bs.tab', 'a', function (e) {
-            if (e.relatedTarget) {
-                $(e.relatedTarget).removeClass('active');
-            }
-        })
     },
     view: function (vnode) {
-        var tabLis = vnode.attrs.tabLis;
-        var tabs = vnode.attrs.tabs;
         return [
-            m("ul", {id: "tabs", class: "nav nav-tabs"}, [
-                tabLis.map(function (tabLi) {
-                    return m(tabLi);
-                }),
-                m("li", {
-                    class: "nav-item dropdown",
-                    style: "visibility: " + (dropDownState.length > 0 ? "visible" : "visible")
-                }, [
-                    m("a[href=#]", {
-                        class: "nav-link dropdown-toggle",
-                        'data-toggle': "dropdown",
-                        role: "button",
-                        'aria-haspopup': "true",
-                        'aria-expanded': "false"
-                    }, "...V"),
-                    m("div", {class: "dropdown-menu"}, [
-                        dropDownState.map(function (link) {
-                            // return m("a[href=/sqlg/dropdown1]", {
-                            //     class: "dropdown-item",
-                            //     oncreate: m.route.link,
-                            //     'data-target': "#dropdown1"
-                            // }, "Action")
-                            return m("a[href=" + link.href + "]", {
-                                class: "dropdown-item",
-                                oncreate: m.route.link,
-                                'data-target': link.dataTarget
-                            }, link.name)
-                        })
-                    ])
-                ])
+            m("div", {class: "tabs-to-dropdown"}, [
+                m(Nav, {tabs: vnode.attrs.tabs})
             ]),
-            m("div", {class: "tab-content"}, [
-                tabs.map(function (tab) {
-                    return m(tab);
-                })
-            ])
+            vnode.attrs.tabs.map(function (tab) {
+                return m("div", {class: "tab-content " + (vnode.attrs.activeTab === tab.name() ? "active" : "inactive")}, [
+                    m(tab)
+                ]);
+            })
         ];
     }
 }

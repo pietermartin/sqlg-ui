@@ -1,21 +1,21 @@
-// var sqlLi = {
+// var sqlLi4 = {
 //     view: function (vnode) {
 //         return m("li", {class: "nav-item"}, [
-//             m("a[href=/sqlg/sql]", {
+//             m("a[href=/sqlg/sql4]", {
 //                 oncreate: m.route.link,
-//             }, "Sql")
+//             }, "Sql4")
 //         ]);
 //     }
 // }
 
-var sql = {
+var sql4 = {
     name: function () {
-        return "sql";
+        return "sql4";
     },
     url: function() {
-        return "/sqlg/sql";
+        return "/sqlg/sql4";
     },
     view: function (vnode) {
-        return m("div", "sql");
+        return m("div", "sql4");
     }
 }
