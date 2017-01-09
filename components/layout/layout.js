@@ -8,14 +8,10 @@ module.exports = {
 
             init: function(handler, leftEl) {
                 var self = this;
-
                 this.leftEl = leftEl;
-
                 handler.addEventListener('mousedown', function(evt) {
                     evt.preventDefault();    /* prevent text selection */
-
                     self.lastX = evt.clientX;
-
                     w.addEventListener('mousemove', self.drag);
                     w.addEventListener('mouseup', self.endDrag);
                 });
@@ -23,11 +19,9 @@ module.exports = {
 
             drag: function(evt) {
                 var wL, wDiff = evt.clientX - splitter.lastX;
-
                 wL = d.defaultView.getComputedStyle(splitter.leftEl, '').getPropertyValue('width');
                 wL = parseInt(wL, 10) + wDiff;
                 splitter.leftEl.style.width = wL + 'px';
-
                 splitter.lastX = evt.clientX;
             },
 

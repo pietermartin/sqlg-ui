@@ -1,13 +1,27 @@
 body {
+    background: #f2f2f2;
+    color: #222;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.05em;
+    font-weight: 400;
     height: 100%;
     width: 100%;
+    line-height: 1.6rem;
+    min-height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
+/*NAV*/
 header {
+    background: linear-gradient(to left, rgba(54, 194, 182, 0.96) 0, rgba(62, 188, 207, 0.96) 100%);
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     height: auto;
+    width: 100%;
+    z-index: 1000;
 }
 
 main {
@@ -35,6 +49,7 @@ footer {
     flex: auto;
     overflow-x: hidden;
     overflow-y: hidden;
+    z-index: 1;
 }
 
 .splitter {
