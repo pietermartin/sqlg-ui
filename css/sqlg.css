@@ -14,7 +14,38 @@ body {
     flex-direction: column;
 }
 
-/*NAV*/
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+*:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.clear {
+    display: block;
+}
+
+.clear::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 1px;
+    visibility: hidden;
+}
+
+article, aside, details, figcaption, figure, footer, header, section {
+    display: block;
+}
+
 header {
     background: linear-gradient(to left, rgba(54, 194, 182, 0.96) 0, rgba(62, 188, 207, 0.96) 100%);
     border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -22,6 +53,12 @@ header {
     height: auto;
     width: 100%;
     z-index: 1000;
+}
+
+/* this toffies the tabs, remove and all is fine again, tabs are not flexed. */
+nav {
+    display: flex;
+    justify-content: space-between;
 }
 
 main {

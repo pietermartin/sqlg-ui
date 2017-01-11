@@ -5,21 +5,20 @@ var TopologyTree = require("./components/topologytree/topologyTree");
 var Schema = require("./components/topology/schema");
 var Properties = require("./components/topology/properties");
 
-m.mount(document.body, Connect);
-
 m.route(document.body, "/", {
-    "/home": {
+    "/": {
         render: function () {
             return m(Layout, [
                 m(Menu, {
                     leftMenus: [
-                        {url: "#", text: "Home1"},
-                        {url: "#", text: "Home2"},
-                        {url: "#", text: "Home3"},
-                        {url: "#", text: "Home4"}
+                        {url: "/sqlg/menu1", text: "Menu1"},
+                        {url: "/sqlg/menu2", text: "Menu2"},
+                        {url: "/sqlg/menu3", text: "Menu3"},
+                        {url: "/sqlg/menu4", text: "Menu4"}
                     ],
                     rightMenus: [
-                        {url: "#", text: "Right1"}, {url: "#", text: "Right2"}
+                        {url: "/sqlg/menu5", text: "Menu5"},
+                        {url: "/sqlg/menu6", text: "Menu6"}
                     ]
                 }),
                 m(TopologyTree),
@@ -27,30 +26,61 @@ m.route(document.body, "/", {
             ])
         }
     },
-    "/sqlg/:tab": {
+    "/sqlg/:menu/:tab": {
         render: function (vnode) {
+            var tabs =  [];
+            switch (vnode.attrs.menu) {
+                case 'Menu1':
+                    tabs.push({url: "/sqlg/Menu1/Tab1", text: "Tab1"});
+                    break;
+                case 'Menu2':
+                    tabs.push({url: "/sqlg/Menu2/Tab1", text: "Tab1"});
+                    tabs.push({url: "/sqlg/Menu2/Tab2", text: "Tab2"});
+                    break;
+                case 'Menu3':
+                    tabs.push({url: "/sqlg/Menu3/Tab1", text: "Tab1"});
+                    tabs.push({url: "/sqlg/Menu3/Tab2", text: "Tab2"});
+                    tabs.push({url: "/sqlg/Menu3/Tab3", text: "Tab3"});
+                    break;
+                case 'Menu4':
+                    tabs.push({url: "/sqlg/Menu4/Tab1", text: "Tab1"});
+                    tabs.push({url: "/sqlg/Menu4/Tab2", text: "Tab2"});
+                    tabs.push({url: "/sqlg/Menu4/Tab3", text: "Tab3"});
+                    tabs.push({url: "/sqlg/Menu4/Tab4", text: "Tab4"});
+                    break;
+                case 'Menu5':
+                    tabs.push({url: "/sqlg/Menu5/Tab5", text: "Tab5"});
+                    tabs.push({url: "/sqlg/Menu5/Tab6", text: "Tab6"});
+                    break;
+                case 'Menu6':
+                    tabs.push({url: "/sqlg/Menu6/Tab7", text: "Tab7"});
+                    tabs.push({url: "/sqlg/Menu6/Tab8", text: "Tab8"});
+                    break;
+                default:
+                    console.log("asdfasdf");
+            }
             return m(Layout, [
                 m(Menu, {
+                        activeMenu: vnode.attrs.menu,
+                        // key: vnode.attrs.menu,
                         leftMenus: [
-                            {url: "#", text: "Home1"},
-                            {url: "#", text: "Home2"},
-                            {url: "#", text: "Home3"},
-                            {url: "#", text: "Home4"}
+                            {url: "/sqlg/Menu1/Tab1", text: "Menu1"},
+                            {url: "/sqlg/Menu2/Tab1", text: "Menu2"},
+                            {url: "/sqlg/Menu3/Tab1", text: "Menu3"},
+                            {url: "/sqlg/Menu4/Tab1", text: "Menu4"}
                         ],
                         rightMenus: [
-                            {url: "#", text: "Right1"},
-                            {url: "#", text: "Right2"}
+                            {url: "/sqlg/Menu5/Tab5", text: "Menu5"},
+                            {url: "/sqlg/Menu6/Tab7", text: "Menu6"}
                         ]
                     }
                 ),
                 m(TopologyTree),
                 m(Menu, {
-                    leftMenus: [
-                        {url: "#", text: "Home1"},
-                        {url: "#", text: "Home2"},
-                        {url: "#", text: "Home3"},
-                        {url: "#", text: "Home4"}
-                    ]
+                    activeMenu: vnode.attrs.tab,
+                    key: vnode.attrs.menu + vnode.attrs.tab,
+                    menu: false,
+                    leftMenus: tabs
                 })
             ])
         }

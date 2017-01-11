@@ -1,72 +1,34 @@
-var uistate = {
-    menuWidth: null,
-    leftMenuArray: null,
-    rightMenuArray: null,
-    leftMenus: {},
-    rightMenus: {},
-    dropDownMenuArray: [],
-    buttonLeft: 0,
-    buttonWidth: 0,
-    showDropDown: false,
-    calculateVisibility: function () {
-        var redraw = uistate.showDropDown;
-        for (var i = 0; i < uistate.leftMenuArray.length; i++) {
-            var menu = uistate.leftMenus[uistate.leftMenuArray[i].text];
-            if (uistate.showDropDown) {
-                uistate.showDropDown = menu.left + menu.width > (uistate.menuWidth - uistate.buttonWidth);
-            } else {
-                uistate.showDropDown = menu.left + menu.width > (uistate.menuWidth);
-            }
-            menu.visible = !uistate.showDropDown;
-        }
-        for (i = 0; i < uistate.rightMenuArray.length; i++) {
-            menu = uistate.rightMenus[uistate.rightMenuArray[i].text];
-            if (uistate.showDropDown) {
-                uistate.showDropDown = menu.left + menu.width > (uistate.menuWidth - uistate.buttonWidth);
-            } else {
-                uistate.showDropDown = menu.left + menu.width > (uistate.menuWidth);
-            }
-            menu.visible = !uistate.showDropDown;
-        }
-        return redraw !== uistate.showDropDown;
-    }
-};
-
-var MenuLi = {
-    view: function (vnode) {
-        return m("li", [
-            m("a", {href: vnode.attrs.menu.url}, [
-                m("div", vnode.attrs.menu.text)
-            ])
-        ])
-    }
-}
-
-var MenuDropdown = {
-    view: function (vnode) {
-        return m("div", m("ul",
-            uistate.dropDownMenuArray.map(function (menu) {
-                    return m("li", {class: menu.visible ? "hidden" : "vissible"}, [
-                        m("a", {href: menu.url}, [
-                            m("div", menu.text)
-                        ])
-                    ])
-                }
-            )));
-    }
-}
-
 var MenuNav = {
+    uistate: null,
+    oninit: function (vnode) {
+        this.uistate = vnode.attrs.uistate;
+    },
+    oncreate: function (vnode) {
+        for (var i = 0; i < vnode.children.length; i++) {
+            var ulVnode = vnode.children[i];
+            for (var j = 0; j < ulVnode.children.length; j++) {
+                var liVnode = ulVnode.children[j];
+                var menu;
+                if (this.uistate.leftMenus[liVnode.state.menu.text] !== undefined) {
+                    menu = this.uistate.leftMenus[liVnode.state.menu.text];
+                } else {
+                    menu = this.uistate.rightMenus[liVnode.state.menu.text];
+                }
+                menu.left = $(liVnode.dom).position().left;
+                menu.width = $(liVnode.dom).outerWidth();
+            }
+        }
+    },
     onupdate: function (vnode) {
         for (var i = 0; i < vnode.children.length; i++) {
             var ulVnode = vnode.children[i];
             for (var j = 0; j < ulVnode.children.length; j++) {
                 var liVnode = ulVnode.children[j];
                 var menu;
-                if (uistate.leftMenus[liVnode.attrs.menu.text] !== undefined) {
-                    menu = uistate.leftMenus[liVnode.attrs.menu.text];
+                if (this.uistate.leftMenus[liVnode.state.menu.text] !== undefined) {
+                    menu = this.uistate.leftMenus[liVnode.state.menu.text];
                 } else {
-                    menu = uistate.rightMenus[liVnode.attrs.menu.text];
+                    menu = this.uistate.rightMenus[liVnode.state.menu.text];
                 }
                 menu.left = $(liVnode.dom).position().left;
                 menu.width = $(liVnode.dom).outerWidth();
@@ -74,23 +36,37 @@ var MenuNav = {
         }
     },
     view: function (vnode) {
-        return m("nav", {role: "navigation"}, [
+        var ui = this.uistate;
+        return m("nav", {class: ui.isMenu ? "menu" : "tab", role: "navigation"}, [
             m("div", {class: "nav-menu"}, vnode.children),
-            m("div", {class: uistate.showDropDown ? "nav-dropdown visible" : "nav-dropdown hidden"},
-                m("ul", [
+            m("div", {
+                class: this.uistate.showDropDown ? "nav-menu-dropdown visible" : "nav-menu-dropdown hidden",
+                oncreate: function() {
+                    if (ui.calculateVisibility()) {
+                        setTimeout(function () {
+                            m.redraw();
+                        }, 20)
+                    }
+                }
+            },
+                m("ul",
                     m("li", {
                         oncreate: function (vnode) {
-                            uistate.buttonLeft = $(vnode.dom).position().left;
-                            uistate.buttonWidth = $(vnode.dom).outerWidth()
-                            if (uistate.calculateVisibility()) {
-                                m.redraw();
+                            ui.buttonLeft = $(vnode.dom).position().left;
+                            ui.buttonWidth = $(vnode.dom).outerWidth();
+                            if (ui.calculateVisibility()) {
+                                setTimeout(function () {
+                                    m.redraw();
+                                }, 20)
                             }
                         },
                         onupdate: function (vnode) {
-                            uistate.buttonLeft = $(vnode.dom).position().left;
-                            uistate.buttonWidth = $(vnode.dom).outerWidth()
-                            if (uistate.calculateVisibility()) {
-                                m.redraw();
+                            ui.buttonLeft = $(vnode.dom).position().left;
+                            ui.buttonWidth = $(vnode.dom).outerWidth();
+                            if (ui.calculateVisibility()) {
+                                setTimeout(function () {
+                                    m.redraw();
+                                }, 20)
                             }
                         }
                     }, [
@@ -99,9 +75,17 @@ var MenuNav = {
                                 m("span", {class: "fa fa-angle-double-down"})
                             ])
                         ]),
-                        m(MenuDropdown)
+                        m("div", m("ul",
+                            ui.dropDownMenuArray.map(function (menu) {
+                                    return m("li", {class: menu.visible ? "hidden" : "vissible"}, [
+                                        m("a", {href: menu.url, oncreate: m.route.link}, [
+                                            m("div", menu.text)
+                                        ])
+                                    ])
+                                }
+                            )))
                     ])
-                ])
+                )
             )
         ]);
     }
@@ -109,19 +93,81 @@ var MenuNav = {
 
 var Menu = {
     oninit: function (vnode) {
-        uistate.leftMenuArray = vnode.attrs.leftMenus;
-        uistate.rightMenuArray = vnode.attrs.rightMenus;
+        var uistate = {
+            isMenu: true,
+            menuLeft: 0,
+            menuWidth: 0,
+            leftMenuArray: [],
+            rightMenuArray: [],
+            leftMenus: {},
+            rightMenus: {},
+            dropDownMenuArray: [],
+            buttonLeft: 0,
+            buttonWidth: 0,
+            showDropDown: false,
+            calculateVisibility: function () {
+                var redraw = this.showDropDown;
+                var showDropdown;
+                for (var i = 0; i < this.leftMenuArray.length; i++) {
+                    var menu = this.leftMenus[this.leftMenuArray[i].text];
+                    if (this.showDropDown) {
+                        showDropdown = (menu.left + menu.width) > (this.menuLeft + this.menuWidth - this.buttonWidth);
+                    } else {
+                        showDropdown = (menu.left + menu.width) > (this.menuLeft + this.menuWidth);
+                    }
+                    menu.visible = !showDropdown;
+                }
+                for (i = 0; i < this.rightMenuArray.length; i++) {
+                    menu = this.rightMenus[this.rightMenuArray[i].text];
+                    if (this.showDropDown) {
+                        showDropdown = (menu.left + menu.width) > (this.menuLeft + this.menuWidth - this.buttonWidth);
+                    } else {
+                        showDropdown = (menu.left + menu.width) > (this.menuLeft + this.menuWidth);
+                    }
+                    menu.visible = !showDropdown;
+                }
+                this.showDropDown = showDropdown;
+                return redraw !== this.showDropDown;
+            },
+            setMenuInactive: function() {
+                this.leftMenuArray.map(function (menu) {
+                    menu.active = false;
+                });
+                if (this.rightMenuArray) {
+                    this.rightMenuArray.map(function (menu) {
+                        menu.active = false;
+                    });
+                }
+            }
+        };
+        vnode.state.uistate = uistate;
+        if (!vnode.attrs.isMenu) {
+            uistate.isMenu = false;
+        }
+        if (vnode.attrs.leftMenus) {
+            uistate.leftMenuArray = vnode.attrs.leftMenus;
+        }
+        if (vnode.attrs.rightMenus) {
+            uistate.rightMenuArray = vnode.attrs.rightMenus;
+        }
         vnode.attrs.leftMenus.map(function (menu) {
             menu.visible = true;
+            menu.active = false;
             uistate.leftMenus[menu.text] = menu;
         });
         if (vnode.attrs.rightMenus) {
             vnode.attrs.rightMenus.map(function (menu) {
                 menu.visible = true;
+                menu.active = false;
                 uistate.rightMenus[menu.text] = menu;
             });
         }
-
+        if (this.uistate.leftMenus[vnode.attrs.activeMenu]) {
+            this.uistate.leftMenus[vnode.attrs.activeMenu].active = true;
+        }
+        if (this.uistate.rightMenus[vnode.attrs.activeMenu]) {
+            this.uistate.rightMenus[vnode.attrs.activeMenu].active = true;
+        }
         uistate.leftMenuArray.map(function (menu) {
             uistate.dropDownMenuArray.push(menu);
         });
@@ -132,11 +178,26 @@ var Menu = {
         }
     },
     onupdate: function (vnode) {
-        uistate.menuWidth = vnode.dom.offsetWidth;
+        this.uistate.menuLeft = $(vnode.dom).position().left;
+        this.uistate.menuWidth = $(vnode.dom).outerWidth();
+        this.uistate.setMenuInactive();
+        var redraw = false;
+        if (this.uistate.leftMenus[vnode.attrs.activeMenu] && !this.uistate.leftMenus[vnode.attrs.activeMenu].active) {
+            redraw = true;
+            this.uistate.leftMenus[vnode.attrs.activeMenu].active = true;
+        }
+        if (this.uistate.rightMenus[vnode.attrs.activeMenu] && !this.uistate.rightMenus[vnode.attrs.activeMenu].active) {
+            redraw = true;
+            this.uistate.rightMenus[vnode.attrs.activeMenu].active = true;
+        }
+        if (redraw) {
+            setTimeout(function(){m.redraw()}, 20);
+        }
     },
     oncreate: function (vnode) {
-        uistate.menuWidth = vnode.dom.offsetWidth;
-        $(".nav-menu").each(function () {
+        this.uistate.menuLeft = $(vnode.dom).position().left;
+        this.uistate.menuWidth = $(vnode.dom).outerWidth();
+        $('.nav-menu').each(function () {
             var resizeTimeout = 20;
             $(window).bind("resize", function () {
                 if (typeof sizeWait != "undefined") {
@@ -149,17 +210,35 @@ var Menu = {
         });
     },
     view: function (vnode) {
-        return m(MenuNav,
+        return m(MenuNav, {uistate: this.uistate},
             m("ul", {class: "left-menu"},
-                uistate.leftMenuArray.map(function (menu) {
-                    return m(MenuLi, {menu: menu})
+                vnode.state.uistate.leftMenuArray.map(function (menu) {
+                    return m("li", {
+                        class: menu.active ? "active" : "",
+                        oninit: function (vnode) {
+                            vnode.state.menu = menu
+                        }
+                    }, [
+                        m("a", {href: menu.url, oncreate: m.route.link}, [
+                            m("div", menu.text)
+                        ])
+                    ]);
                 })
             ),
             m("ul", {class: "right-menu"},
-                uistate.rightMenuArray.map(function (menu) {
-                    return m(MenuLi, {menu: menu})
+                vnode.state.uistate.rightMenuArray.map(function (menu) {
+                    return m("li", {
+                        class: menu.active ? "active" : "",
+                        oninit: function (vnode) {
+                            vnode.state.menu = menu
+                        }
+                    }, [
+                        m("a", {href: menu.url, oncreate: m.route.link}, [
+                            m("div", menu.text)
+                        ])
+                    ]);
                 })
             )
         );
     }
-}
+};

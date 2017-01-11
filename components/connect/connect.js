@@ -24,7 +24,7 @@ var login = function () {
         }
     })
         .then(function (data) {
-            m.route.set("/sqlg/home", {}, true)
+            m.route.set("/sqlg/menu1/tab1", {}, true)
         })
 };
 

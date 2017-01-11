@@ -38,6 +38,7 @@ public class ConnectResource {
             //TODO replace with request params
             SqlgGraphSingleton.INSTANCE.addSqlgGraph("jdbc:postgresql://localhost:5432/sqlgraphdb", sqlgGraph);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         return "";
