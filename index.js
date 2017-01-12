@@ -83,11 +83,15 @@ m.route(document.body, "/", {
                         ]
                     }
                 ),
-                m(TopologyTree),
+                // m(TopologyTree),
                 m(Tab, {
                     activeTab: vnode.attrs.tab,
                     key: vnode.attrs.menu + vnode.attrs.tab,
-                    menu: false,
+                    leftTabs: tabs
+                }),
+                m(Tab, {
+                    activeTab: vnode.attrs.tab,
+                    key: vnode.attrs.menu + vnode.attrs.tab,
                     leftTabs: tabs
                 })
             ])

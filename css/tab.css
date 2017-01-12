@@ -1,127 +1,43 @@
-nav.tab > div.nav-tab {
-    display: flex;
-    justify-content: space-between;
-    flex-grow: 1;
+nav.tab {
+    display: block;
     overflow: hidden;
 }
 
-nav.tab > div.nav-tab-dropdown {
-    display: flex;
-    justify-content: flex-end;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 2rem;
+nav.tab > div.outer {
 }
 
-nav.tab > div.nav-tab-dropdown.hidden {
-    display: none;
+nav.tab > div.outer > div.nav-tab.left {
+    float: left;
+    white-space: nowrap;
 }
 
-nav.tab > div > ul {
-    display: flex;
-    list-style: none;
-    flex-wrap: nowrap;
-    margin: 0;
-    padding: 0;
+nav.tab > div.outer > div.nav-tab.right {
+    float: right;
+    white-space: nowrap;
 }
 
-nav.tab > div > ul.left-tab {
-    justify-content: flex-start;
+nav.tab > div.outer  > div.nav-tab a {
+    font-size: 14px;
+    letter-spacing: -1px;
+    font-weight: bold;
+    text-decoration:none;
+    display:inline-block;
+    padding:8px 12px;
+    border-radius:8px;
+    border:1px solid red;
+    color: red;
 }
 
-nav.tab > div > ul > li {
-    flex: 0 1 auto;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    transition: all linear 0.1s;
+nav.tab > div.outer > div.nav-tab a.active {
+    background-color: blue;
 }
 
-nav.tab > div > ul > li.active {
+nav.tab > div.outer > div.nav-tab a.tab-button.right {
     background-color: red;
 }
 
-nav.tab > div > ul > li:hover {
-    background: rgba(58, 162, 173, 1);
-}
-
-nav.tab > div > ul > li a + div {
-    background: linear-gradient(to bottom, rgba(58, 162, 173, 1) 0, rgba(62, 188, 207, 0.96) 100%);;
-    border-radius: 0 0 2px 2px;
-    box-shadow: 0 3px 1px rgba(0, 0, 0, .05);
-    display: none;
-    position: absolute;
-    right: 0px;
-}
-
-nav.tab > div > ul > li a + div .visible {
-    display: block;
-}
-
-nav.tab > div > ul > li a + div .hidden {
-    display: none;
-}
-
-nav.tab > div > ul > li:hover a + div {
-    display: block;
-    z-index: 2;
-}
-
-nav.tab > div > ul > li a + div > ul {
-    list-style-type: none;
-}
-
-nav.tab > div > ul > li a + div > ul > li {
-    margin: 0;
-    padding: 0;
-}
-
-nav.tab > div > ul > li a + div > ul > li.active {
+nav.tab > div.outer > div.nav-tab a.tab-button.left {
     background-color: red;
-}
-
-nav.tab > div > ul > li a + div > ul > li > a {
-    color: rgba(255, 255, 255, .9);
-    display: block;
-    font-size: .5rem;
-    letter-spacing: 1.5px;
-    padding: .25rem 1rem;
-    text-decoration: none;
-    text-transform: uppercase;
-}
-
-nav.tab > div > ul > li a + div > ul > li:hover > a {
-    background-color: rgba(0, 0, 0, .15);
-}
-
-nav.tab > div > ul > li > a {
-    align-items: flex-start;
-    color: #fff;
-    display: flex;
-    font-size: 1.35rem;
-    font-weight: 200;
-    letter-spacing: 1px;
-    max-width: 130px;
-    padding: 1rem 1.5rem;
-    text-decoration: none;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    transition: all linear 0.1s;
-}
-
-nav.tab > div.nav-tab-dropdown > ul > li > a {
-    padding: 1rem 0.5rem 1rem .5rem;
-}
-
-.menu-divide {
-    border: 1px inset rgba(0, 0, 0, .1);
-}
-
-nav.tab > div > ul > li > a {
-    -webkit-transition: all .2s ease;
-    -moz-transition: all .2s ease;
-    -ms-transition: all .2s ease;
-    -o-transition: all .2s ease;
-    transition: all .2s ease;
 }
 
 @media (min-width: 990px) {
