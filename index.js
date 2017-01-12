@@ -77,6 +77,23 @@ m.route(document.body, "/", {
                 default:
                     console.log("asdfasdf");
             }
+            var tabs2 = [];
+            switch (vnode.attrs.menu) {
+                case 'Menu1':
+                    tabs2.push({url: "/sqlg/Menu1/Tab21", text: "Tab21"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab22", text: "Tab22"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab23", text: "Tab23"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab24", text: "Tab24"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab25", text: "Tab25"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab26", text: "Tab26"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab27", text: "Tab27"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab28", text: "Tab28"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab29", text: "Tab29"});
+                    tabs2.push({url: "/sqlg/Menu1/Tab210", text: "Tab210"});
+                    break;
+                default:
+                    console.log("asdfasdf");
+            }
             return m(Layout, [
                 m(Menu, {
                         activeMenu: vnode.attrs.menu,
@@ -92,11 +109,11 @@ m.route(document.body, "/", {
                         ]
                     }
                 ),
-                m(TopologyTree),
-                // m(Tab, {
-                //     activeTab: vnode.attrs.tab,
-                //     leftTabs: tabs
-                // }),
+                // m(TopologyTree),
+                m(Tab, {
+                    activeTab: vnode.attrs.tab,
+                    leftTabs: tabs2
+                }),
                 m(Tab, {
                     activeTab: vnode.attrs.tab,
                     leftTabs: tabs

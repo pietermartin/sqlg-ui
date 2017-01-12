@@ -109,7 +109,12 @@ var Tab = {
                                             aVnode.state.tab.active = true;
                                         } else {
                                             redraw = redraw || aVnode.state.tab.active;
-                                            aVnode.state.tab.active = false;
+                                            //this is to ensure only the relevant tabs active is set to false.
+                                            //As the update fires for all tabs on the page we only want to set the one with the same text.
+                                            //TODO text needs an id.
+                                            if (ui.leftTabs[ui.activeTabText]) {
+                                                aVnode.state.tab.active = false;
+                                            }
                                         }
                                     }
                                 }

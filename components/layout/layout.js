@@ -23,6 +23,9 @@ module.exports = {
                 wL = parseInt(wL, 10) + wDiff;
                 splitter.leftEl.style.width = wL + 'px';
                 splitter.lastX = evt.clientX;
+                setTimeout(function() {
+                    m.redraw();
+                }, 0);
             },
 
             endDrag: function() {
