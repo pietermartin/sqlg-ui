@@ -32,6 +32,15 @@ m.route(document.body, "/", {
             switch (vnode.attrs.menu) {
                 case 'Menu1':
                     tabs.push({url: "/sqlg/Menu1/Tab1", text: "Tab1"});
+                    tabs.push({url: "/sqlg/Menu1/Tab2", text: "Tab2"});
+                    tabs.push({url: "/sqlg/Menu1/Tab3", text: "Tab3"});
+                    tabs.push({url: "/sqlg/Menu1/Tab4", text: "Tab4"});
+                    tabs.push({url: "/sqlg/Menu1/Tab5", text: "Tab5"});
+                    tabs.push({url: "/sqlg/Menu1/Tab6", text: "Tab6"});
+                    tabs.push({url: "/sqlg/Menu1/Tab7", text: "Tab7"});
+                    tabs.push({url: "/sqlg/Menu1/Tab8", text: "Tab8"});
+                    tabs.push({url: "/sqlg/Menu1/Tab9", text: "Tab9"});
+                    tabs.push({url: "/sqlg/Menu1/Tab10", text: "Tab10"});
                     break;
                 case 'Menu2':
                     tabs.push({url: "/sqlg/Menu2/Tab1", text: "Tab1"});
@@ -62,7 +71,6 @@ m.route(document.body, "/", {
             return m(Layout, [
                 m(Menu, {
                         activeMenu: vnode.attrs.menu,
-                        // key: vnode.attrs.menu,
                         leftMenus: [
                             {url: "/sqlg/Menu1/Tab1", text: "Menu1"},
                             {url: "/sqlg/Menu2/Tab1", text: "Menu2"},
@@ -76,11 +84,11 @@ m.route(document.body, "/", {
                     }
                 ),
                 m(TopologyTree),
-                m(Menu, {
-                    activeMenu: vnode.attrs.tab,
+                m(Tab, {
+                    activeTab: vnode.attrs.tab,
                     key: vnode.attrs.menu + vnode.attrs.tab,
                     menu: false,
-                    leftMenus: tabs
+                    leftTabs: tabs
                 })
             ])
         }

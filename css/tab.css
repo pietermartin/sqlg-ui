@@ -1,24 +1,23 @@
-nav.menu > div.nav-menu {
+nav.tab > div.nav-tab {
     display: flex;
     justify-content: space-between;
     flex-grow: 1;
     overflow: hidden;
 }
 
-nav.menu > div.nav-menu-dropdown {
+nav.tab > div.nav-tab-dropdown {
     display: flex;
     justify-content: flex-end;
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: 2rem;
-    overflow: visible;
 }
 
-nav.menu > div.nav-menu-dropdown.hidden {
+nav.tab > div.nav-tab-dropdown.hidden {
     display: none;
 }
 
-nav.menu > div > ul {
+nav.tab > div > ul {
     display: flex;
     list-style: none;
     flex-wrap: nowrap;
@@ -26,15 +25,11 @@ nav.menu > div > ul {
     padding: 0;
 }
 
-nav.menu > div > ul.left-menu {
+nav.tab > div > ul.left-tab {
     justify-content: flex-start;
 }
 
-nav.menu > div > ul.right-menu {
-    justify-content: flex-end;
-}
-
-nav.menu > div > ul > li {
+nav.tab > div > ul > li {
     flex: 0 1 auto;
     margin: 0;
     padding: 0;
@@ -42,15 +37,15 @@ nav.menu > div > ul > li {
     transition: all linear 0.1s;
 }
 
-nav.menu > div > ul > li.active {
+nav.tab > div > ul > li.active {
     background-color: red;
 }
 
-nav.menu > div > ul > li:hover {
+nav.tab > div > ul > li:hover {
     background: rgba(58, 162, 173, 1);
 }
 
-nav.menu > div > ul > li a + div {
+nav.tab > div > ul > li a + div {
     background: linear-gradient(to bottom, rgba(58, 162, 173, 1) 0, rgba(62, 188, 207, 0.96) 100%);;
     border-radius: 0 0 2px 2px;
     box-shadow: 0 3px 1px rgba(0, 0, 0, .05);
@@ -59,33 +54,33 @@ nav.menu > div > ul > li a + div {
     right: 0px;
 }
 
-nav.menu > div > ul > li a + div .visible {
+nav.tab > div > ul > li a + div .visible {
     display: block;
 }
 
-nav.menu > div > ul > li a + div .hidden {
+nav.tab > div > ul > li a + div .hidden {
     display: none;
 }
 
-nav.menu > div > ul > li:hover a + div {
+nav.tab > div > ul > li:hover a + div {
     display: block;
     z-index: 2;
 }
 
-nav.menu > div > ul > li a + div > ul {
+nav.tab > div > ul > li a + div > ul {
     list-style-type: none;
 }
 
-nav.menu > div > ul > li a + div > ul > li {
+nav.tab > div > ul > li a + div > ul > li {
     margin: 0;
     padding: 0;
 }
 
-nav.menu > div > ul > li a + div > ul > li.active {
+nav.tab > div > ul > li a + div > ul > li.active {
     background-color: red;
 }
 
-nav.menu > div > ul > li a + div > ul > li > a {
+nav.tab > div > ul > li a + div > ul > li > a {
     color: rgba(255, 255, 255, .9);
     display: block;
     font-size: .5rem;
@@ -95,11 +90,11 @@ nav.menu > div > ul > li a + div > ul > li > a {
     text-transform: uppercase;
 }
 
-nav.menu > div > ul > li a + div > ul > li:hover > a {
+nav.tab > div > ul > li a + div > ul > li:hover > a {
     background-color: rgba(0, 0, 0, .15);
 }
 
-nav.menu > div > ul > li > a {
+nav.tab > div > ul > li > a {
     align-items: flex-start;
     color: #fff;
     display: flex;
@@ -113,7 +108,7 @@ nav.menu > div > ul > li > a {
     transition: all linear 0.1s;
 }
 
-nav.menu > div.nav-menu-dropdown > ul > li > a {
+nav.tab > div.nav-tab-dropdown > ul > li > a {
     padding: 1rem 0.5rem 1rem .5rem;
 }
 
@@ -121,7 +116,7 @@ nav.menu > div.nav-menu-dropdown > ul > li > a {
     border: 1px inset rgba(0, 0, 0, .1);
 }
 
-nav.menu > div > ul > li > a {
+nav.tab > div > ul > li > a {
     -webkit-transition: all .2s ease;
     -moz-transition: all .2s ease;
     -ms-transition: all .2s ease;
@@ -130,13 +125,13 @@ nav.menu > div > ul > li > a {
 }
 
 @media (min-width: 990px) {
-    nav.menu > div > ul > li > a {
+    nav.tab > div > ul > li > a {
         max-width: 500px;
         font-size: 2rem;
         line-height: 2rem;
     }
 
-    nav.menu > div > ul > li > a > div > span {
+    nav.tab > div > ul > li > a > div > span {
         margin: 4px 0 0;
     }
 }

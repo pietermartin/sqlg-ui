@@ -37,7 +37,7 @@ var MenuNav = {
     },
     view: function (vnode) {
         var ui = this.uistate;
-        return m("nav", {class: ui.isMenu ? "menu" : "tab", role: "navigation"}, [
+        return m("nav", {class: "menu", role: "navigation"}, [
             m("div", {class: "nav-menu"}, vnode.children),
             m("div", {
                 class: this.uistate.showDropDown ? "nav-menu-dropdown visible" : "nav-menu-dropdown hidden",
@@ -94,7 +94,6 @@ var MenuNav = {
 var Menu = {
     oninit: function (vnode) {
         var uistate = {
-            isMenu: true,
             menuLeft: 0,
             menuWidth: 0,
             leftMenuArray: [],
@@ -129,21 +128,22 @@ var Menu = {
                 this.showDropDown = showDropdown;
                 return redraw !== this.showDropDown;
             },
-            setMenuInactive: function() {
+            setMenuInactive: function(activeMenu) {
                 this.leftMenuArray.map(function (menu) {
-                    menu.active = false;
+                    if (activeMenu.text !== menu.text) {
+                        menu.active = false;
+                    }
                 });
                 if (this.rightMenuArray) {
                     this.rightMenuArray.map(function (menu) {
-                        menu.active = false;
+                        if (activeMenu.text !== menu.text) {
+                            menu.active = false;
+                        }
                     });
                 }
             }
         };
         vnode.state.uistate = uistate;
-        if (!vnode.attrs.isMenu) {
-            uistate.isMenu = false;
-        }
         if (vnode.attrs.leftMenus) {
             uistate.leftMenuArray = vnode.attrs.leftMenus;
         }
@@ -180,13 +180,13 @@ var Menu = {
     onupdate: function (vnode) {
         this.uistate.menuLeft = $(vnode.dom).position().left;
         this.uistate.menuWidth = $(vnode.dom).outerWidth();
-        this.uistate.setMenuInactive();
         var redraw = false;
         if (this.uistate.leftMenus[vnode.attrs.activeMenu] && !this.uistate.leftMenus[vnode.attrs.activeMenu].active) {
+            this.uistate.setMenuInactive(this.uistate.leftMenus[vnode.attrs.activeMenu]);
             redraw = true;
             this.uistate.leftMenus[vnode.attrs.activeMenu].active = true;
-        }
-        if (this.uistate.rightMenus[vnode.attrs.activeMenu] && !this.uistate.rightMenus[vnode.attrs.activeMenu].active) {
+        } else if (this.uistate.rightMenus[vnode.attrs.activeMenu] && !this.uistate.rightMenus[vnode.attrs.activeMenu].active) {
+            this.uistate.setMenuInactive(this.uistate.rightMenus[vnode.attrs.activeMenu]);
             redraw = true;
             this.uistate.rightMenus[vnode.attrs.activeMenu].active = true;
         }
