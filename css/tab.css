@@ -35,6 +35,10 @@ nav.tab > div.outer > div.nav-tab a.tab-button {
     background-color: red;
 }
 
+nav.tab > div.outer > div.nav-tab a.tab-button.hide {
+    visibility: hidden;
+}
+
 @media (min-width: 990px) {
     nav.tab > div > ul > li > a {
         max-width: 500px;

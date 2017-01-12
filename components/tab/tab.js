@@ -9,17 +9,17 @@ var Tab = {
             dropDownTabArray: [],
             buttonWidth: 0,
             buttonVisible: false,
-            setVisibilityFromStartToActiveTab: function (tabIndex) {
+            setVisibilityFromStartToActiveTab: function () {
                 var redraw = false;
-                var activeTab = this.leftTabArray[tabIndex];
+                var activeTab = this.leftTabArray[this.activeTabIndex];
                 var totalLeftWidth = activeTab.tabWidth + this.buttonWidth;
                 for (var i = this.activeTabIndex - 1; i >= 0; i--) {
                     var tabToLeft = this.leftTabArray[i];
-                    var tabToLeftWidth = tabToLeft.tabWidth;
-                    totalLeftWidth += tabToLeftWidth;
+                    totalLeftWidth += tabToLeft.tabWidth;
                     if (totalLeftWidth > this.navWidth) {
                         redraw = redraw || tabToLeft.visible;
                         tabToLeft.visible = false;
+                        this.buttonVisible = true;
                     } else {
                         redraw = redraw || !tabToLeft.visible;
                         tabToLeft.visible = true;
@@ -27,7 +27,7 @@ var Tab = {
                 }
                 return redraw;
             },
-            setVisibilityFromActiveTabToButton: function() {
+            setVisibilityFromActiveTabToButton: function () {
                 var redraw = false;
                 var totalLeftWidth = this.buttonWidth;
                 for (var i = 0; i < this.leftTabArray.length; i++) {
@@ -37,6 +37,7 @@ var Tab = {
                         if (totalLeftWidth > this.navWidth) {
                             redraw = redraw || tabToLeft.visible;
                             tabToLeft.visible = false;
+                            this.buttonVisible = true;
                         } else {
                             redraw = redraw || !tabToLeft.visible;
                             tabToLeft.visible = true;
@@ -46,24 +47,10 @@ var Tab = {
                 return redraw;
             },
             calculateVisibility: function () {
-                var redraw = false;
-                if (this.leftTabArray[this.activeTabIndex + 1] && this.leftTabArray[this.activeTabIndex + 1].visible) {
-                    var totalLeftWidth = this.buttonWidth;
-                    for (var i = 0; i < this.leftTabArray.length; i++) {
-                        var tabToLeft = this.leftTabArray[i];
-                        totalLeftWidth += tabToLeft.tabWidth;
-                        if (totalLeftWidth > this.navWidth) {
-                            redraw = redraw || tabToLeft.visible;
-                            tabToLeft.visible = false;
-                            this.buttonVisible = true;
-                        } else {
-                            redraw = redraw || !tabToLeft.visible;
-                            tabToLeft.visible = true;
-                        }
-                    }
-                } else {
-                    redraw = redraw || this.setVisibilityFromStartToActiveTab(this.activeTabIndex);
-                    this.setVisibilityFromActiveTabToButton();
+                this.buttonVisible = false;
+                var redraw = this.setVisibilityFromStartToActiveTab();
+                if (!redraw) {
+                    redraw = this.setVisibilityFromActiveTabToButton();
                 }
                 return redraw;
             }
@@ -95,9 +82,11 @@ var Tab = {
             m("div", {
                     class: "outer",
                     oncreate: function (vnode) {
+                        //noinspection JSValidateTypes
                         ui.navWidth = $(vnode.dom).outerWidth();
                     },
                     onupdate: function (vnode) {
+                        //noinspection JSValidateTypes
                         ui.navWidth = $(vnode.dom).outerWidth();
                     }
                 }, [
@@ -107,12 +96,13 @@ var Tab = {
                                 var redraw = false;
                                 for (var i = 0; i < vnode.children.length; i++) {
                                     var buttonVnode = vnode.children[1];
+                                    //noinspection JSValidateTypes
                                     ui.buttonWidth = $(buttonVnode.dom).outerWidth();
                                     var array = vnode.children[0];
                                     for (var j = 0; j < array.children.length; j++) {
                                         var aVnode = array.children[j];
-                                        var tabWidth = $(aVnode.dom).outerWidth();
-                                        aVnode.state.tab.tabWidth = tabWidth;
+                                        //noinspection JSValidateTypes
+                                        aVnode.state.tab.tabWidth = $(aVnode.dom).outerWidth();
                                         if (aVnode.state.tab.text === ui.activeTabText) {
                                             ui.activeTabIndex = j;
                                             redraw = redraw || !aVnode.state.tab.active;
@@ -139,10 +129,10 @@ var Tab = {
                                 oninit: function (vnode) {
                                     vnode.state.tab = tab;
                                 },
-                                oncreate: m.route.link,
+                                oncreate: m.route.link
                             }, tab.text)
                         }),
-                        m("a", {class: "tab-button"}, "button")
+                        m("a", {class: "tab-button " + (ui.buttonVisible ? "" : "hide")}, "button")
                     )
                 ]
             ));
