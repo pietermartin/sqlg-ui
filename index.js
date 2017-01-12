@@ -5,6 +5,15 @@ var TopologyTree = require("./components/topologytree/topologyTree");
 var Schema = require("./components/topology/schema");
 var Properties = require("./components/topology/properties");
 
+$(window).bind("resize", function () {
+    if (typeof sizeWait != "undefined") {
+        clearTimeout(sizeWait);
+    }
+    sizeWait = setTimeout(function () {
+        m.redraw();
+    }, 0);
+});
+
 m.route(document.body, "/", {
     "/": {
         render: function () {
@@ -28,7 +37,7 @@ m.route(document.body, "/", {
     },
     "/sqlg/:menu/:tab": {
         render: function (vnode) {
-            var tabs =  [];
+            var tabs = [];
             switch (vnode.attrs.menu) {
                 case 'Menu1':
                     tabs.push({url: "/sqlg/Menu1/Tab1", text: "Tab1"});
@@ -83,15 +92,13 @@ m.route(document.body, "/", {
                         ]
                     }
                 ),
-                // m(TopologyTree),
+                m(TopologyTree),
+                // m(Tab, {
+                //     activeTab: vnode.attrs.tab,
+                //     leftTabs: tabs
+                // }),
                 m(Tab, {
                     activeTab: vnode.attrs.tab,
-                    key: vnode.attrs.menu + vnode.attrs.tab,
-                    leftTabs: tabs
-                }),
-                m(Tab, {
-                    activeTab: vnode.attrs.tab,
-                    key: vnode.attrs.menu + vnode.attrs.tab,
                     leftTabs: tabs
                 })
             ])

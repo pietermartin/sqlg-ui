@@ -197,17 +197,6 @@ var Menu = {
     oncreate: function (vnode) {
         this.uistate.menuLeft = $(vnode.dom).position().left;
         this.uistate.menuWidth = $(vnode.dom).outerWidth();
-        $('.nav-menu').each(function () {
-            var resizeTimeout = 20;
-            $(window).bind("resize", function () {
-                if (typeof sizeWait != "undefined") {
-                    clearTimeout(sizeWait);
-                }
-                sizeWait = setTimeout(function () {
-                    m.redraw();
-                }, resizeTimeout);
-            });
-        });
     },
     view: function (vnode) {
         return m(MenuNav, {uistate: this.uistate},

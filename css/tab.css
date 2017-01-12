@@ -6,13 +6,8 @@ nav.tab {
 nav.tab > div.outer {
 }
 
-nav.tab > div.outer > div.nav-tab.left {
+nav.tab > div.outer > div.nav-tab {
     float: left;
-    white-space: nowrap;
-}
-
-nav.tab > div.outer > div.nav-tab.right {
-    float: right;
     white-space: nowrap;
 }
 
@@ -28,15 +23,15 @@ nav.tab > div.outer  > div.nav-tab a {
     color: red;
 }
 
+nav.tab > div.outer  > div.nav-tab a.invisible {
+    display: none;
+}
+
 nav.tab > div.outer > div.nav-tab a.active {
     background-color: blue;
 }
 
-nav.tab > div.outer > div.nav-tab a.tab-button.right {
-    background-color: red;
-}
-
-nav.tab > div.outer > div.nav-tab a.tab-button.left {
+nav.tab > div.outer > div.nav-tab a.tab-button {
     background-color: red;
 }
 
