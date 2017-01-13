@@ -3,15 +3,11 @@ nav.tab {
     overflow: hidden;
 }
 
-nav.tab > div.outer {
+nav.tab > div.nav-tab {
+    position: relative;
 }
 
-nav.tab > div.outer > div.nav-tab {
-    float: left;
-    white-space: nowrap;
-}
-
-nav.tab > div.outer  > div.nav-tab a {
+nav.tab > div.nav-tab a {
     font-size: 14px;
     letter-spacing: -1px;
     font-weight: bold;
@@ -23,20 +19,43 @@ nav.tab > div.outer  > div.nav-tab a {
     color: red;
 }
 
-nav.tab > div.outer  > div.nav-tab a.invisible {
+nav.tab > div.nav-tab a.invisible {
     display: none;
 }
 
-nav.tab > div.outer > div.nav-tab a.active {
+nav.tab > div.nav-tab a.active {
     background-color: blue;
 }
 
-nav.tab > div.outer > div.nav-tab a.tab-button {
-    background-color: red;
+nav.tab > div.nav-tab a.tab-button {
+    float: right;
+    color: gray;
+    border: none;
+    font-size: 2rem;
 }
 
-nav.tab > div.outer > div.nav-tab a.tab-button.hide {
+nav.tab > div.nav-tab a.tab-button.hide {
     visibility: hidden;
+}
+
+nav.tab > div.nav-tab > div.tab-dropdown  {
+    display: none;
+    right: 0;
+}
+
+nav.tab > div.nav-tab > a:hover + div.tab-dropdown {
+    display: block;
+    right: 0;
+}
+
+nav.tab > div.nav-tab > div.tab-dropdown a {
+    float: right;
+    clear: right;
+}
+
+nav.tab > div.nav-tab > div.tab-dropdown:hover {
+    display: block;
+    right: 0;
 }
 
 @media (min-width: 990px) {

@@ -42,8 +42,8 @@ nav.menu > div > ul > li {
     transition: all linear 0.1s;
 }
 
-nav.menu > div > ul > li.active {
-    background-color: red;
+nav.menu > div > ul > li.active a {
+    color: red;
 }
 
 nav.menu > div > ul > li:hover {
